@@ -4,6 +4,7 @@ using namespace std;
 #include "dice.h"
 #include "action.h"
 #include "position.h"
+#include "board.h"
 
 // class CanPerformActions {
 // public:
@@ -14,12 +15,14 @@ using namespace std;
 
 class Creature {
 public:
-    Creature(string creature_id, Position &startPosition);
+    Creature(string creature_name, string creature_id);
+    ~Creature();
 
     void takeDamage(int damage);
     void getKilled();
     void resetHealth();
     void performSingleTargetAttack(Creature &target);
+    void performMovementAction(Position position);
     
     // Getters for read-only variables
     int getArmorClass();
@@ -28,21 +31,33 @@ public:
     string getCreatureID();
     bool getAliveStatus();
 
-    void changePosition(int newX, int newY);
-    Position getPosition();
+    Position getBoardPosition();
+    void moveTo(BoardTile* newPosition);
+
+    friend class Board;
 
 protected:
-    int health;
+    // attributes
     int maxHealth;
     int armorClass;
-    string creatureType = "creature";
     string creatureID;
+    string creatureType = "creature";
+
+    // state variables
+    int health;
     bool isAlive;
+    BoardTile* boardPosition = NULL;
+
+    // actions
     TargetedAttackAction attackAction;
-    Position position;
 };
 
 class Skeleton : public Creature{
 public:
-    Skeleton(int &numCreatures);
+    Skeleton(string creature_name, string creatureID);
+};
+
+class Human : public Creature {
+public:
+    Human(string creature_name, string creatureID);
 };

@@ -5,8 +5,6 @@
 #include <vector>
 
 #include "creature.h"
-#include "creature_human.h"
-#include "action.h"
 #include "board.h"
 
 using namespace std;
@@ -19,36 +17,18 @@ void simulateBattle(Creature &creature1, Creature &creature2);
 
 int main() {   
     
+    Board board = Board(8, 8);
+    
+    Human henry = Human("henry", "He");
+    Human jeff = Human ("jeff", "Je");
+    Skeleton gipsy = Skeleton("Gipsy", "Gi");
 
-    string humanID = "Henry";
-    string human2ID = "Jeff";
-    string skeletonID = "Gipsy";
-
-    // // Get user input
-    // int nHumans = getNumHumans();
-    // int nSkeletons = getNumSkeletons();
-
-    // checkUserInput(nHumans, nSkeletons);
-
-    // Define fighters
-    Human henry = Human(humanID, Position(1, 2));
-    Human jeff = Human(human2ID, Position(3, 3));
-
-
-    // Skeleton skeletons(nSkeletons);
-
-    // Simulate the battle
-    // startMessage(nHumans, nSkeletons);
-    simulateBattle(henry, jeff);
-
-    cout << "Battle ended\n";
-
-    vector<Creature> creatures;
-    creatures.push_back(henry);
-    creatures.push_back(jeff);
-
-
-    Board board = Board(4,4, creatures);
+    board.addCreatureToBoard(&henry, Position(1,2));
+    board.addCreatureToBoard(&jeff, Position(3,3));
+    board.addCreatureToBoard(&gipsy, Position(1,1));
+    
+    board.renderBoard();
+    gipsy.moveTo(board.getTileFromPosition(Position(3,0)));
     board.renderBoard();
 }
 

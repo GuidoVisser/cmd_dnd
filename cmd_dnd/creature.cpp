@@ -5,6 +5,7 @@
 #include "creature.h"
 #include "action.h"
 #include "dice.h"
+#include "board.h"
 
 using namespace std;
 
@@ -19,9 +20,7 @@ using namespace std;
 //     }
 // }
 
-Creature::Creature(string creature_id, Position &startPosition): 
-    creatureID(creature_id),
-    position(startPosition) { }
+Creature::Creature(string creature_name, string creature_id) : creatureID(creature_id) { }
 
 void Creature::performSingleTargetAttack(Creature &target) {
 
@@ -33,6 +32,14 @@ void Creature::performSingleTargetAttack(Creature &target) {
         int damage = attackAction.calculateDamage();
         cout << "The attack hits for " << damage << " damage!\n";
         target.takeDamage(damage);
+    }
+}
+
+Creature::~Creature() {
+    if (boardPosition != NULL) {
+        if (boardPosition->creatureOnPosition == this) {
+            boardPosition->creatureOnPosition = NULL;
+        }
     }
 }
 
@@ -50,6 +57,8 @@ void Creature::getKilled () {
 
     cout << creatureID << " dies!\n";
     isAlive = false;
+
+    boardPosition->creatureOnPosition = NULL;
 
     return;
 }
@@ -83,21 +92,40 @@ bool Creature::getAliveStatus() {
     return isAlive;
 }
 
-void Creature::changePosition(int newX, int newY) {
-    position.moveTo(newX, newY);
+Position Creature::getBoardPosition() {
+    if (boardPosition != NULL) {
+        return boardPosition->getPosition();
+    } else {
+        return Position(-1, -1);
+    }
 }
 
-Position Creature::getPosition() {
-    return position;
+void Creature::moveTo(BoardTile* newPosition) {
+    
+    if (newPosition->isAvailableForCreature()) {
+        boardPosition->creatureOnPosition = NULL;
+        newPosition->creatureOnPosition = this;
+
+        boardPosition = newPosition;
+    }
 }
 
-// Skeleton::Skeleton(int &numCreatures): Creature(numCreatures) {
-//     attackDie = Die(20);
-//     damageDie = Die(6);
-//     creatureType = "skeleton";
-//     creatureID = "S1";
-//     attackModifier = 3;
-//     armorClass = 11;
-//     maxHealth = 10;
-//     health = maxHealth;
-// };
+//######################################
+
+Human::Human(string creature_name, string creatureID): Creature(creature_name, creatureID) {
+    creatureType = "human";
+    armorClass = 14;
+    maxHealth = 25;
+    health = maxHealth;
+
+    attackAction = TargetedAttackAction(Die(8), 4);
+};
+
+Skeleton::Skeleton(string creature_name, string creatureID): Creature(creature_name, creatureID) {
+    creatureType = "skeleton";
+    armorClass = 11;
+    maxHealth = 10;
+    health = maxHealth;
+
+    attackAction = TargetedAttackAction(Die(6), 3);
+}

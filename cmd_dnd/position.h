@@ -3,13 +3,16 @@ using namespace std;
 
 class Position {
 public:
+    Position();
     Position(int x, int y);
 
     int getX();
     int getY();
-    void moveTo(int newX, int newY);
 
-private:
+    bool isSamePositionAs(Position pos);
+
+protected:
     int x;
     int y;
 };
+

@@ -1,34 +1,55 @@
 #pragma once
 #include <vector>
+#include <string>
 
-using namespace std;
-
-#include "creature.h"
 #include "position.h"
+
+class Creature;
+class BoardTile;
 
 class Board {
 public:
-    Board();
-    Board(int width, int height, vector<Creature> &creaturesOnBoard);
+    // constructors
+    Board() = delete;
+    Board(int width, int height);
 
+    // deconstructor
     ~Board();
 
-    bool checkIfPositionIsFree(Position pos);
-    int getPositionStatus(Position pos);
-    void setPositionStatus(Position pos, int status);
-
+    void addCreatureToBoard(Creature *addedCreature, Position position);
+    
     void renderBoard();
+
+    BoardTile* getTileFromPosition(Position pos);
 
 private:
     int width;
     int height;
 
-    // 2D array of size width x height on initialization
-    int** positionStatus;
-    // keep track of creature position so you don't 
-    // have to loop through creatures when rendering
-    // Alternatively check for occupied in positionStatus
-    // and loop only trough creatures when position is occupied
-    int** creaturePositions; 
-    vector<Creature> creaturesOnBoard; // TODO | change to vector
+    BoardTile** tiles;
+    void initializeTiles();
+
+    vector<Creature> creaturesOnBoard;
+
+    string constructPositionString(string positionContent);
+};
+
+
+class BoardTile {
+public:
+    BoardTile();
+    BoardTile(int x, int y);
+
+    Position getPosition();
+    bool isAvailableForCreature();
+
+    friend class Board;
+    friend class Creature;
+
+private:
+    Creature *creatureOnPosition = NULL;
+    Position position;
+
+    // for later when pathfinding is added
+    int movementCost; // -1 denotes that a position is inaccassible
 };
