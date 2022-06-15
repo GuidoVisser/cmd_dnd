@@ -3,9 +3,12 @@
 #include <ctime>
 #include <string>
 #include <vector>
+#include <unistd.h>
+#include <cstdlib>
 
 #include "creature.h"
 #include "board.h"
+#include "screen.h"
 
 using namespace std;
 
@@ -27,9 +30,32 @@ int main() {
     board.addCreatureToBoard(&jeff, Position(3,3));
     board.addCreatureToBoard(&gipsy, Position(1,1));
     
-    board.renderBoard();
-    gipsy.moveTo(board.getTileFromPosition(Position(3,0)));
-    board.renderBoard();
+    // board.renderBoard();
+    
+    // int newx;
+    // int newy;
+    // cout << "To What location do you want Gipsy to move?\n";
+    // cout << "X (0 - 7): \n";
+    // cin >> newx;
+    // cout << "Y (0 - 7): \n";
+    // cin >> newy;
+    // gipsy.moveTo(board.getTileFromPosition(Position(newy,newx)));
+    // board.renderBoard();
+
+    int screenWidth;
+    int screenHeight;
+
+    cin >> screenWidth;
+    cin >> screenHeight;
+
+    TitleScreen titleScreen = TitleScreen(screenWidth, screenHeight);
+    
+    int timesteps = 10;
+    for (int i = 0; i < timesteps; i++) {
+        titleScreen.renderScreen();
+        sleep(1);
+        titleScreen.updateScreenContent();
+    }
 }
 
 int getNumHumans() {
