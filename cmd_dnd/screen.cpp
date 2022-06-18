@@ -71,8 +71,8 @@ void TitleScreen::updateScreenContent() {
     screenState = (screenState + 1) % 2;
 
     screenContent[screenWidth / 2 - 1][screenHeight / 2 - 1] = loadingIconCharacters[screenState];
-    screenContent[screenWidth / 2][screenHeight / 2]         = loadingIconCharacters[screenState];
-    screenContent[screenWidth / 2][screenHeight / 2 - 1]     = loadingIconCharacters[(screenState + 1) % 2];
+    screenContent[screenWidth / 2]    [screenHeight / 2]     = loadingIconCharacters[screenState];
+    screenContent[screenWidth / 2]    [screenHeight / 2 - 1] = loadingIconCharacters[(screenState + 1) % 2];
     screenContent[screenWidth / 2 - 1][screenHeight / 2]     = loadingIconCharacters[(screenState + 1) % 2];
 
 }
